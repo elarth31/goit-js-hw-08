@@ -22,14 +22,17 @@ img {
 
 img:hover {
     transform: scale(1.05);
-}
+} 
 
 .gallery {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 24px;
-    justify-items: center;
+}
 
+.gallery-item {
+    flex-basis: calc(33.33% - 16px);
+    height: 240px;
 }
 
 .gallery-image {
@@ -37,7 +40,3 @@ img:hover {
     height: 100%;
 }
 
-.gallery-item {
-    width: 360px;
-    height: 240px;
-}
