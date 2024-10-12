@@ -1,64 +1,58 @@
-import images from './data.js';
+import images from './gallery-images.js';
 
-const gallery = document.querySelector('.gallery');
+const photoGrid = document.querySelector('.gallery');
 
-const markup = images.map(({ preview, original, description }) => {
-  return `<li class="gallery-item">
-  <a class="gallery-link" href="${removeFirstLaseChar(original)}">
-    <img
-      class="gallery-image"
-      src="${removeFirstLaseChar(preview)}"
-      data-source="${removeFirstLaseChar(original)}"
-      alt="${description}"
-    />
-  </a>
-</li>`;
+const galleryHTML = images.map(({ preview, original, description }) => {
+  return `
+    <li class="gallery-item">
+      <a class="gallery-link" href="${original}">
+        <img
+          class="gallery-image"
+          src="${preview}"
+          data-source="${original}"
+          alt="${description}"
+        />
+      </a>
+    </li>
+  `;
 });
 
-gallery.insertAdjacentHTML('beforeend', markup.join(''));
 
-gallery.addEventListener('click', event => {
+photoGrid.insertAdjacentHTML('beforeend', galleryHTML.join(''));
+
+
+photoGrid.addEventListener('click', event => {
   event.preventDefault();
-  if (event.target.nodeName === 'IMG') {
-    openModal(event.target.dataset.source);
+
+  const isImageEl = event.target.classList.contains('gallery-image');
+  if (!isImageEl) {
+    return;
   }
+
+  const largeImageURL = event.target.dataset.source;
+  openImageInModal(largeImageURL);
 });
 
-document.addEventListener('keydown', event => {
-  const modal = document.querySelector('modal');
-  if (event.code === 'Enter' ||
-    event.code === 'NumpadEnter' ||
-    (event.code === 'Space' && !modal)
-  ) {
-    openModal(event.target.querySelector('img').dataset.source);
-  }
-});
 
-function openModal (src) {
-  const instance = basicLightbox.create(
-    `<img src="${src}" width="1112" height="640">`,
-    {
-      className: 'modal',
+function openImageInModal(imageSource) {
+  const modalInstance = basicLightbox.create(`
+    <img src="${imageSource}" width="1112" height="640">
+  `, {
+    onShow: (modalInstance) => {
+   
+      window.addEventListener('keydown', handleEscapeKey);
+    },
+    onClose: (modalInstance) => {
 
-      onShow: instance => {
-        document.addEventListener('keydown', onEscapePress);
-      },
-
-      onClose: instance => {
-        document.addEventListener('keydown', onEscapePress);
-      },
+      window.removeEventListener('keydown', handleEscapeKey);
     }
-  );
+  });
 
-  instance.show();
+  modalInstance.show();
 
-  function onEscapePress(event) {
-    if (event.code === 'Escape') {
-      instance.close();
+  function handleEscapeKey(event) {
+    if (event.key === 'Escape') {
+      modalInstance.close();
     }
   }
-}
-
-function removeFirstLaseChar(string) {
-  return string.slice(1, string.length - 1);
 }

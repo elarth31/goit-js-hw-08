@@ -1,0 +1,43 @@
+
+body {
+    margin: 0 auto;
+    padding: 24px;
+    max-width: 1128px;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+img {
+    display: block;    
+    height: auto;
+    max-width: 100%;
+    transition: transform 0.3s ease, border-radius 0.3s ease;
+    border-radius: 5px;
+    cursor: zoom-in;
+}
+
+img:hover {
+    transform: scale(1.05);
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    justify-items: center;
+
+}
+
+.gallery-image {
+    width: 100%;
+    height: 100%;
+}
+
+.gallery-item {
+    width: 360px;
+    height: 240px;
+}
